@@ -16,6 +16,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use("/api", require("./routes/jobRouter"));
+
 
 app.listen(PORT, () =>
   console.log(`app listening on http://127.0.0.1:${PORT}/api/`)
