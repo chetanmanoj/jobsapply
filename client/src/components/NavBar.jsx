@@ -19,9 +19,10 @@ const NavBar = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <span className="flex justify-start items-start font-bold">
-          JobsApply
-        </span>
+        <div className="flex justify-start items-start font-bold">
+          <span>Jobs</span>
+          <span className="text-[#1a70eb]">Apply</span>
+        </div>
         <div className="flex flex-row items-center gap-5 text-[1.3rem] font-medium">
           <button className="text-[#1a70eb] border-b-2 border-[#1a70eb]">
             Home
@@ -49,11 +50,10 @@ const NavBar = () => {
   } else {
     // MOBILE RENDER
     return (
-      <div className="flex flex-row items-center justify-between w-screen fixed px-14 pt-6 ">
-        
-          <button className="flex justify-start text-navbar text-[1.2rem] font-bold items-start">
-            JobsApply
-          </button>
+      <div className="flex flex-row items-center justify-between w-screen px-14 pt-6 ">
+        <button className="flex justify-start text-navbar text-[1.2rem] font-bold items-start">
+          JobsApply
+        </button>
 
         <button
           onClick={toggleNav}
@@ -67,7 +67,7 @@ const NavBar = () => {
           <ul
             className={
               toggle
-                ? "list-none absolute flex flex-col gap-5 top-full left-1/2 transform -translate-x-1/2 text-[1rem] border-2 border-solid border-secondary rounded-xl p-4 text-black "
+                ? "list-none absolute bg-white flex flex-col gap-5 top-full left-1/2 transform -translate-x-1/2 text-[1rem] border-2 border-solid border-secondary rounded-xl p-4 text-black "
                 : "hidden"
             }
           >
