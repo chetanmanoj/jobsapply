@@ -5,12 +5,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
 
 const NavBar = () => {
+  // useState and function for toggling the navbar on mobile render
   const [toggle, setToggle] = useState(false);
-  const isMobile = useMediaQuery({ maxWidth: 900 });
   const toggleNav = () => {
     setToggle(!toggle);
   };
+  // define max-width for responsive navbar
+  const isMobile = useMediaQuery({ maxWidth: 900 });
 
+  // DESKTOP RENDER
   if (!isMobile) {
     return (
       <motion.div
@@ -19,27 +22,29 @@ const NavBar = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
+        {/* LEFT HAND SIDE  */}
         <div className="flex justify-start items-start font-bold">
           <span>Jobs</span>
-          <span className="text-[#1a70eb]">Apply</span>
+          <span className="text-secondary">Apply</span>
         </div>
+        {/* NAV ELEMENTS OR BUTTONS  */}
         <div className="flex flex-row items-center gap-5 text-[1.3rem] font-medium">
-          <button className="text-[#1a70eb] border-b-2 border-[#1a70eb]">
+          <button className="text-secondary border-b-2 border-secondary">
             Home
           </button>
           <button>Companies</button>
           <button>Salaries</button>
         </div>
-
+        {/* RIGHT HAND SIDE  */}
         <div className="flex flex-row items-end gap-5">
           <motion.button
-            className=" rounded-xl px-6 py-2 border-2 border-[#1a70eb] text-[1rem]"
+            className=" rounded-xl px-6 py-2 border-2 border-secondary text-[1rem]"
             whileHover={{ boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)" }}
           >
             SIGN IN
           </motion.button>
           <motion.button
-            className=" rounded-xl px-6 py-2 bg-[#1a70eb] border-2 border-[#1a70eb] text-white text-[1rem]"
+            className=" rounded-xl px-6 py-2 bg-secondary border-2 border-secondary text-primary text-[1rem]"
             whileHover={{ boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)" }}
           >
             POST A JOB
@@ -47,14 +52,16 @@ const NavBar = () => {
         </div>
       </motion.div>
     );
-  } else {
-    // MOBILE RENDER
+  }
+  // MOBILE RENDER
+  else {
     return (
       <div className="flex flex-row items-center justify-between w-screen px-14 pt-6 ">
         <button className="flex justify-start text-navbar text-[1.2rem] font-bold items-start">
-          JobsApply
+          <span>Jobs</span>
+          <span className="text-secondary">Apply</span>
         </button>
-
+        {/* TOGGLE NAVBAR  */}
         <button
           onClick={toggleNav}
           className="relative text-secondary text-[1.5rem] "
@@ -67,13 +74,15 @@ const NavBar = () => {
           <ul
             className={
               toggle
-                ? "list-none absolute bg-white flex flex-col gap-5 top-full left-1/2 transform -translate-x-1/2 text-[1rem] border-2 border-solid border-secondary rounded-xl p-4 text-black "
+                ? "list-none absolute bg-white flex flex-col text-left border-2 -ml-12 border-solid w-48 gap-5 top-full left-1/2 transform -translate-x-1/2 z-10 text-[1rem]  rounded-xl p-4 text-black "
                 : "hidden"
             }
           >
-            <button className="text-[#1a70eb]">Home</button>
+            <button className="text-secondary">Home</button>
             <button>Companies</button>
             <button>Salaries</button>
+            <button>SIGN IN </button>
+            <button>POST A JOB </button>
           </ul>
         </button>
       </div>

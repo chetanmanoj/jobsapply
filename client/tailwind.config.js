@@ -2,7 +2,12 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: "#fff",
+        secondary: "#1a70eb",
+      },
+    },
     fontFamily: {
       navbar: ["Comfortaa", "sans-serif"],
       descp: ["Oxygen", "sans-serif"],

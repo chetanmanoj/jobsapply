@@ -11,10 +11,11 @@ const JobCard = ({
 }) => {
   return (
     <motion.div
-      className="flex tab:flex-row flex-col bg-[#8DB8F5] w-9/12 max-h-[25rem] tab:max-h-[20rem] py-4 tab:min-h-56 desk:py-36 tab:text-[1.2rem] items-center rounded-2xl px-4 tab:px-8 border-2 border-slate-300"
-      whileHover={{ boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.2)" }}
+      className="flex tab:flex-row flex-col border-2 shadow-md border-secondary w-9/12 max-h-[25rem] tab:max-h-[20rem] py-4 tab:min-h-56 desk:py-36 tab:text-[1.2rem] items-center rounded-2xl px-4 tab:px-8"
+      whileHover={{ scale: 1.01 }}
+      transition={{ duration: 0.25 }}
     >
-      <div className="flex flex-1 flex-col border-b-2 border-white tab:border-b-0 pb-4 tab:pb-0 gap-2 ">
+      <div className="flex flex-1 flex-col border-b-2 border-primary tab:border-b-0 pb-4 tab:pb-0 gap-2 ">
         <h1 className=" text-[1.1rem] font-semibold tab:text-[1.5rem]">
           {title}
         </h1>
