@@ -21,6 +21,9 @@ const Home = () => {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
   // options for the select dropdown
   const selectOptions = [
     { value: "marketing", label: "Marketing" },
@@ -30,21 +33,22 @@ const Home = () => {
   // function to handle change for category dropdown
   const handleChange = (selectedOption) => {
     setCat(selectedOption.value);
+    setLoading(true)
+    getJobs(1, 15, selectedOption.value);
   };
-
   // function to store search query into variable
   const handleSearch = (e) => {
     setQuery(e.target.value);
   };
 
-  // Separate variables for default job postings 
-  const defaultJobs = cat === "marketing" ? marketing : engineer;
+  // Separate variables for default job postings
+  // const defaultJobs = cat === "marketing" ? marketing : engineer;
 
   // Filtered job postings based on search query
   const searchedJobs =
     query.trim() === ""
-      ? defaultJobs
-      : defaultJobs.filter(
+      ? marketing
+      : marketing.filter(
           (job) =>
             (job.title &&
               job.title.toLowerCase().includes(query.toLowerCase())) ||
@@ -59,30 +63,35 @@ const Home = () => {
         );
 
   // function to fetch job postings from the server
-  const getJobs = async () => {
+  const getJobs = async (page = 1, resultsPerPage = 15, what = cat) => {
     try {
-      const [marketingRes, engineerRes] = await Promise.all([
-        axios.get("http://127.0.0.1:8000/api/jobs/marketing", {
+      const marketingRes = await axios.get(
+        `http://127.0.0.1:8000/api/jobs/marketing?page=${page}&results_per_page=${resultsPerPage}&what=${what}`,
+        {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
           withCredentials: true,
-        }),
-        axios.get("http://127.0.0.1:8000/api/jobs/engineer", {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          withCredentials: true,
-        }),
-      ]);
+        }
+      );
+      // axios.get("http://127.0.0.1:8000/api/jobs/engineer", {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     Accept: "application/json",
+      //   },
+      //   withCredentials: true,
+      // }),
+        // if(cat === 'marketing'){}
       setMarketing(marketingRes.data);
-      setEngineer(engineerRes.data);
+        
+      //   else if(cat === 'engineer'){
+      // setEngineer(marketingRes.data);
+      //   }
       setLoading(false);
-      if (marketingRes.data.length === 0 && engineerRes.data.length === 0) {
-        setError("No job postings found");
-      }
+      // if (marketingRes.data.length === 0 && engineerRes.data.length === 0) {
+      //   setError("No job postings found");
+      // }
     } catch (error) {
       console.error("Error fetching jobs:", error.message);
       setTimeout(() => {
@@ -94,8 +103,12 @@ const Home = () => {
 
   // useEffect for fetching job postings
   useEffect(() => {
-    getJobs();
+    getJobs(1, 15, cat);
   }, []);
+
+  const loadMoreJobs = () => {
+    setCurrentPage(currentPage + 1);
+  };
 
   // styles for the category select component
   const selectStyle = {
@@ -150,9 +163,9 @@ const Home = () => {
         {/* JOB POSTINGS DIV  */}
         <div className="flex flex-col items-center min-h-screen gap-9 min-w-full border-t-2 border-slate-300 pt-16 mt-12  ">
           {/* <InfiniteScroll
-            dataLength={marketing.length}
-            next={getJobs}
-            hasMore={hasmore}
+            dataLength={searchedJobs.length}
+            next={loadMoreJobs}
+            hasMore={currentPage < totalPages}
             loader={<h4>Loading...</h4>}
             endMessage={<p>No more items</p>}
           > */}
@@ -164,7 +177,7 @@ const Home = () => {
               size="3x"
               style={{ color: "#1a70eb" }}
             />
-          ) : (  
+          ) : (
             <>
               {searchedJobs.map((job) => (
                 <JobCard
@@ -197,7 +210,7 @@ const Home = () => {
           {/* </InfiniteScroll> */}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };
