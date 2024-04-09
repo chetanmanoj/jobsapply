@@ -3,11 +3,14 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+
+const errorHandler = require("./utils/ErrorHandler");
+// port number
 const PORT = 8000;
 
 app.use(
   cors({
-    origin: " http://localhost:3000",
+    origin: " http://localhost:5173",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
@@ -16,9 +19,13 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/api", require("./routes/jobRouter"));
+// error handling middleware
+app.use(errorHandler);
 
+// use routes
+app.use("/api/jobs", require("./routes/jobRouter"));
 
+// start server
 app.listen(PORT, () =>
   console.log(`app listening on http://127.0.0.1:${PORT}/api/`)
 );

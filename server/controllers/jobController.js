@@ -1,21 +1,25 @@
 const axios = require("axios");
 require("dotenv").config();
 
-// const baseUrl = `http://api.adzuna.com/v1/api/jobs/gb/search/1?app_id=${process.env.APP_ID}&app_key=${process.env.API_KEY}&results_per_page=1&what=javascript%20developer&content-type=application/json`
-// const baseUrl = "https://api.adzuna.com/v1/api"
-const baseUrl = `https://api.adzuna.com/v1/api/jobs/gb/search/2?app_id=${process.env.APP_ID}&app_key=${process.env.API_KEY}&results_per_page=6&what=marketing&where=uk`
+// STORE API URLS FOR FETCHING JOB POSTING INFO
+const marketingUrl = `https://api.adzuna.com/v1/api/jobs/gb/search/2?app_id=${process.env.APP_ID}&app_key=${process.env.API_KEY}&what=marketing`;
+const engineerUrl = `https://api.adzuna.com/v1/api/jobs/gb/search/2?app_id=${process.env.APP_ID}&app_key=${process.env.API_KEY}&what=engineer`;
 
-const searchJobs = async (req, res) => {
+// CONTROLLER FOR MARKETING JOBS
+const searchMarketing = async (req, res) => {
   try {
-    const { what, where } = req.body;
+    const response = await axios.get(marketingUrl);
+    res.json(response.data.results);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+;  }
+};
 
-    const params = {
-      app_id: process.env.APP_ID,
-      app_key: process.env.API_KEY,
-      what: "marketing",
-      where: "UK",
-    };
-    const response = await axios.get(baseUrl);
+// CONTROLLER FOR ENGINEER JOBS
+const searchEngineer = async (req, res) => {
+  try {
+    const response = await axios.get(engineerUrl);
     res.json(response.data.results);
   } catch (error) {
     console.error(error);
@@ -23,4 +27,4 @@ const searchJobs = async (req, res) => {
   }
 };
 
-module.exports = {searchJobs}
+module.exports = { searchMarketing, searchEngineer };
