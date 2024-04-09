@@ -3,13 +3,15 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import Select from "react-select";
 import InfiniteScroll from "react-infinite-scroll-component";
+// Icons import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
-// NavBar and Job posting container component imports
-import { NavBar, JobCard } from "../../components";
+// NavBar, Footer and Job posting container component imports
+import { NavBar, Footer, JobCard } from "../../components";
 
 const Home = () => {
+  // useStates to store functionality data
   const [cat, setCat] = useState("marketing");
   const [marketing, setMarketing] = useState([]);
   const [engineer, setEngineer] = useState([]);
@@ -19,20 +21,23 @@ const Home = () => {
   const [error, setError] = useState("");
   const [query, setQuery] = useState("");
 
+  // options for the select dropdown
   const selectOptions = [
     { value: "marketing", label: "Marketing" },
     { value: "engineer", label: "Engineer" },
   ];
 
+  // function to handle change for category dropdown
   const handleChange = (selectedOption) => {
     setCat(selectedOption.value);
   };
 
+  // function to store search query into variable
   const handleSearch = (e) => {
     setQuery(e.target.value);
   };
 
-  // Separate variables for default job postings
+  // Separate variables for default job postings 
   const defaultJobs = cat === "marketing" ? marketing : engineer;
 
   // Filtered job postings based on search query
@@ -75,11 +80,13 @@ const Home = () => {
       setMarketing(marketingRes.data);
       setEngineer(engineerRes.data);
       setLoading(false);
-      setError("");
+      if (marketingRes.data.length === 0 && engineerRes.data.length === 0) {
+        setError("No job postings found");
+      }
     } catch (error) {
       console.error("Error fetching jobs:", error.message);
       setTimeout(() => {
-        setError("Couldn't display job details. Please try again");
+        setError("Error fetching jobs. Please try again");
         setLoading(false);
       }, 4000);
     }
@@ -124,10 +131,9 @@ const Home = () => {
             className="flex flex-1 border-2 border-secondary px-4 min-h-16 rounded-xl "
             onChange={handleSearch}
           />
-          <div className="flex flex-1 flex-row justify-between tab:justify-center gap-2 tab:gap-12">
+          <div className="flex flex-1 flex-row justify-between desk:justify-center tab:justify-end gap-2 tab:gap-12">
             <Select
               defaultValue={selectOptions[0]}
-              // label="Single select"
               options={selectOptions}
               onChange={handleChange}
               styles={selectStyle}
@@ -142,7 +148,7 @@ const Home = () => {
           </div>
         </div>
         {/* JOB POSTINGS DIV  */}
-        <div className="flex flex-col items-center gap-9 min-w-full border-t-2 border-slate-300 pt-16 mt-12  ">
+        <div className="flex flex-col items-center min-h-screen gap-9 min-w-full border-t-2 border-slate-300 pt-16 mt-12  ">
           {/* <InfiniteScroll
             dataLength={marketing.length}
             next={getJobs}
@@ -150,6 +156,7 @@ const Home = () => {
             loader={<h4>Loading...</h4>}
             endMessage={<p>No more items</p>}
           > */}
+          {/* RENDER THE JOB POSTINGS  */}
           {loading ? (
             <FontAwesomeIcon
               icon={faSpinner}
@@ -157,39 +164,7 @@ const Home = () => {
               size="3x"
               style={{ color: "#1a70eb" }}
             />
-          ) : (
-            // <>
-            //   {(() => {
-            //     switch (cat) {
-            //       case "marketing":
-            //         return marketing.map((job) => (
-            //           <JobCard
-            //             key={job.id}
-            //             title={job.title}
-            //             company={job.company.display_name}
-            //             location={job.location.display_name}
-            //             minsalary={job.salary_min}
-            //             maxsalary={job.salary_max}
-            //             description={job.description}
-            //           />
-            //         ));
-            //       case "engineer":
-            //         return engineer.map((job) => (
-            //           <JobCard
-            //             key={job.id}
-            //             title={job.title}
-            //             company={job.company.display_name}
-            //             location={job.location.display_name}
-            //             minsalary={job.salary_min}
-            //             maxsalary={job.salary_max}
-            //             description={job.description}
-            //           />
-            //         ));
-            //       default:
-            //         return null;
-            //     }
-            //   })()}
-            // </>
+          ) : (  
             <>
               {searchedJobs.map((job) => (
                 <JobCard
@@ -197,13 +172,13 @@ const Home = () => {
                   title={job.title}
                   company={job.company.display_name}
                   location={job.location.display_name}
-                  minsalary={job.salary_min}
                   maxsalary={job.salary_max}
                   description={job.description}
                 />
               ))}
             </>
           )}
+          {/* ERROR HANDLING  */}
           {error && (
             <div className="flex flex-col items-center mt-4">
               <div className="text-red-500 mb-2">{error}</div>
@@ -222,6 +197,7 @@ const Home = () => {
           {/* </InfiniteScroll> */}
         </div>
       </div>
+      <Footer/>
     </>
   );
 };

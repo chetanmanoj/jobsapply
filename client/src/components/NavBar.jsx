@@ -26,6 +26,7 @@ const NavBar = () => {
         <div className="flex justify-start items-start font-bold">
           <span>Jobs</span>
           <span className="text-secondary">Apply</span>
+          <span className="text-[0.7rem] align-bottom">UK</span>
         </div>
         {/* NAV ELEMENTS OR BUTTONS  */}
         <div className="flex flex-row items-center gap-5 text-[1.3rem] font-medium">
@@ -60,6 +61,7 @@ const NavBar = () => {
         <button className="flex justify-start text-navbar text-[1.2rem] font-bold items-start">
           <span>Jobs</span>
           <span className="text-secondary">Apply</span>
+          <span className="text-[0.5rem]">UK</span>
         </button>
         {/* TOGGLE NAVBAR  */}
         <button
