@@ -13,8 +13,7 @@ import { NavBar, Footer, JobCard } from "../../components";
 const Home = () => {
   // useStates to store functionality data
   const [cat, setCat] = useState("marketing");
-  const [marketing, setMarketing] = useState([]);
-  const [engineer, setEngineer] = useState([]);
+  const [postings, setPostings] = useState([]);
   // useStates for user experience
   const [loading, setLoading] = useState(true);
   const [hasmore, setHasmore] = useState(true);
@@ -41,14 +40,12 @@ const Home = () => {
     setQuery(e.target.value);
   };
 
-  // Separate variables for default job postings
-  // const defaultJobs = cat === "marketing" ? marketing : engineer;
 
   // Filtered job postings based on search query
   const searchedJobs =
     query.trim() === ""
-      ? marketing
-      : marketing.filter(
+      ? postings
+      : postings.filter(
           (job) =>
             (job.title &&
               job.title.toLowerCase().includes(query.toLowerCase())) ||
@@ -65,8 +62,8 @@ const Home = () => {
   // function to fetch job postings from the server
   const getJobs = async (page = 1, resultsPerPage = 15, what = cat) => {
     try {
-      const marketingRes = await axios.get(
-        `http://127.0.0.1:8000/api/jobs/marketing?page=${page}&results_per_page=${resultsPerPage}&what=${what}`,
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/jobs/getpostings?page=${page}&results_per_page=${resultsPerPage}&what=${what}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -75,19 +72,7 @@ const Home = () => {
           withCredentials: true,
         }
       );
-      // axios.get("http://127.0.0.1:8000/api/jobs/engineer", {
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Accept: "application/json",
-      //   },
-      //   withCredentials: true,
-      // }),
-        // if(cat === 'marketing'){}
-      setMarketing(marketingRes.data);
-        
-      //   else if(cat === 'engineer'){
-      // setEngineer(marketingRes.data);
-      //   }
+      setPostings(response.data);
       setLoading(false);
       // if (marketingRes.data.length === 0 && engineerRes.data.length === 0) {
       //   setError("No job postings found");
