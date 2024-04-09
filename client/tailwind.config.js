@@ -14,7 +14,7 @@ export default {
     },
     screens: {
       tab: "450px",
-      desk: "640px",
+      desk: "1350px",
     },
   },
   plugins: [],

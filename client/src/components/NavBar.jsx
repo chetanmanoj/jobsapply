@@ -64,7 +64,7 @@ const NavBar = () => {
         {/* TOGGLE NAVBAR  */}
         <button
           onClick={toggleNav}
-          className="relative text-secondary text-[1.5rem] "
+          className="relative text-black text-[1.5rem] "
         >
           {toggle ? (
             <FontAwesomeIcon icon={faX} />

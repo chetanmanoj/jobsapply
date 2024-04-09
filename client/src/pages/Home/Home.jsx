@@ -17,6 +17,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [hasmore, setHasmore] = useState(true);
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
 
   const selectOptions = [
     { value: "marketing", label: "Marketing" },
@@ -26,6 +27,31 @@ const Home = () => {
   const handleChange = (selectedOption) => {
     setCat(selectedOption.value);
   };
+
+  const handleSearch = (e) => {
+    setQuery(e.target.value);
+  };
+
+  // Separate variables for default job postings
+  const defaultJobs = cat === "marketing" ? marketing : engineer;
+
+  // Filtered job postings based on search query
+  const searchedJobs =
+    query.trim() === ""
+      ? defaultJobs
+      : defaultJobs.filter(
+          (job) =>
+            (job.title &&
+              job.title.toLowerCase().includes(query.toLowerCase())) ||
+            (job.company.display_name &&
+              job.company.display_name
+                .toLowerCase()
+                .includes(query.toLowerCase())) ||
+            (job.location.display_name &&
+              job.location.display_name
+                .toLowerCase()
+                .includes(query.toLowerCase()))
+        );
 
   // function to fetch job postings from the server
   const getJobs = async () => {
@@ -48,14 +74,14 @@ const Home = () => {
       ]);
       setMarketing(marketingRes.data);
       setEngineer(engineerRes.data);
-      // console.log("jobs:", res.data);
       setLoading(false);
+      setError("");
     } catch (error) {
       console.error("Error fetching jobs:", error.message);
       setTimeout(() => {
         setError("Couldn't display job details. Please try again");
         setLoading(false);
-      }, 2000);
+      }, 4000);
     }
   };
 
@@ -89,13 +115,14 @@ const Home = () => {
   return (
     <>
       <NavBar />
-      <div className="flex flex-col items-center mt-12">
+      <div className="flex flex-col items-center mt-12 mb-16">
         {/* SEARCH BAR, CATEGORY SELECT AND BUTTONS  */}
         <div className="flex flex-col desk:flex-row justify-between gap-5 w-10/12 min-h-16">
           <input
             type="text"
             placeholder="Search"
             className="flex flex-1 border-2 border-secondary px-4 min-h-16 rounded-xl "
+            onChange={handleSearch}
           />
           <div className="flex flex-1 flex-row justify-between tab:justify-center gap-2 tab:gap-12">
             <Select
@@ -131,37 +158,50 @@ const Home = () => {
               style={{ color: "#1a70eb" }}
             />
           ) : (
+            // <>
+            //   {(() => {
+            //     switch (cat) {
+            //       case "marketing":
+            //         return marketing.map((job) => (
+            //           <JobCard
+            //             key={job.id}
+            //             title={job.title}
+            //             company={job.company.display_name}
+            //             location={job.location.display_name}
+            //             minsalary={job.salary_min}
+            //             maxsalary={job.salary_max}
+            //             description={job.description}
+            //           />
+            //         ));
+            //       case "engineer":
+            //         return engineer.map((job) => (
+            //           <JobCard
+            //             key={job.id}
+            //             title={job.title}
+            //             company={job.company.display_name}
+            //             location={job.location.display_name}
+            //             minsalary={job.salary_min}
+            //             maxsalary={job.salary_max}
+            //             description={job.description}
+            //           />
+            //         ));
+            //       default:
+            //         return null;
+            //     }
+            //   })()}
+            // </>
             <>
-              {(() => {
-                switch (cat) {
-                  case "marketing":
-                    return marketing.map((job) => (
-                      <JobCard
-                        key={job.id}
-                        title={job.title}
-                        company={job.company.display_name}
-                        location={job.location.display_name}
-                        minsalary={job.salary_min}
-                        maxsalary={job.salary_max}
-                        description={job.description}
-                      />
-                    ));
-                  case "engineer":
-                    return engineer.map((job) => (
-                      <JobCard
-                        key={job.id}
-                        title={job.title}
-                        company={job.company.display_name}
-                        location={job.location.display_name}
-                        minsalary={job.salary_min}
-                        maxsalary={job.salary_max}
-                        description={job.description}
-                      />
-                    ));
-                  default:
-                    return null;
-                }
-              })()}
+              {searchedJobs.map((job) => (
+                <JobCard
+                  key={job.id}
+                  title={job.title}
+                  company={job.company.display_name}
+                  location={job.location.display_name}
+                  minsalary={job.salary_min}
+                  maxsalary={job.salary_max}
+                  description={job.description}
+                />
+              ))}
             </>
           )}
           {error && (
