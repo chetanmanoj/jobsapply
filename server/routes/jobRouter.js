@@ -1,10 +1,9 @@
 const express = require("express");
 const jobRouter = express.Router();
 
-// IMPORT CONTROLLERS
-const { searchMarketing, searchEngineer } = require("../controllers/jobController");
+// IMPORT CONTROLLER(S)
+const { searchJobs } = require("../controllers/jobController");
 
-jobRouter.route("/marketing").get(searchMarketing);
-jobRouter.route("/engineer").get(searchEngineer);
+jobRouter.route("/getpostings").get(searchJobs);
 
 module.exports = jobRouter;
