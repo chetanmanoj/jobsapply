@@ -64,7 +64,7 @@ const Home = () => {
   const getJobs = async (page = 1, resultsPerPage = 15, what = cat) => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/api/jobs/getpostings?page=${page}&results_per_page=${resultsPerPage}&what=${what}`,
+        `https://jobsapply.vercel.app/api/jobs/getpostings?page=${page}&results_per_page=${resultsPerPage}&what=${what}`,
         {
           headers: {
             "Content-Type": "application/json",
