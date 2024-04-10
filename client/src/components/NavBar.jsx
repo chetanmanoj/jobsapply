@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { useMediaQuery } from "react-responsive";
+// Icons import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faX } from "@fortawesome/free-solid-svg-icons";
 
@@ -83,8 +84,8 @@ const NavBar = () => {
             <button className="text-secondary">Home</button>
             <button>Companies</button>
             <button>Salaries</button>
-            <button>SIGN IN </button>
-            <button>POST A JOB </button>
+            <button className=" border-2 border-secondary rounded-xl py-2">SIGN IN </button>
+            <button className=" border-2 border-secondary bg-secondary text-white rounded-xl py-2">POST A JOB </button>
           </ul>
         </button>
       </div>

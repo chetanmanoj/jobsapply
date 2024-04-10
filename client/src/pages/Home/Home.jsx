@@ -1,27 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Select from "react-select";
-import InfiniteScroll from "react-infinite-scroll-component";
 // Icons import
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 // NavBar, Footer and Job posting container component imports
-import { NavBar, Footer, JobCard } from "../../components";
+import { NavBar, Footer, JobCard, LoadMore } from "../../components";
 
 const Home = () => {
-  // useStates to store functionality data
+  // store job category
   const [cat, setCat] = useState("marketing");
+  // store fetched job postings
   const [postings, setPostings] = useState([]);
   // useStates for user experience
   const [loading, setLoading] = useState(true);
-  const [hasmore, setHasmore] = useState(true);
+  const [extraloading, setExtraloading] = useState(false); // loading state for 'load more' action
   const [error, setError] = useState("");
+  // store search query
   const [query, setQuery] = useState("");
-
+  // set page (to fetch job posting)
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   // options for the select dropdown
   const selectOptions = [
@@ -31,20 +31,21 @@ const Home = () => {
 
   // function to handle change for category dropdown
   const handleChange = (selectedOption) => {
-    setCat(selectedOption.value);
-    setLoading(true)
-    getJobs(1, 15, selectedOption.value);
+    setCat(selectedOption.value); // set category variable with the newly selected option
+    setPostings([]); // postings array is cleared so that the previously selected category postings dont appear again
+    setLoading(true);
+    getJobs(1, 15, selectedOption.value); // getjobs function is called again to fetch jobs for the newly selected category
   };
+
   // function to store search query into variable
   const handleSearch = (e) => {
     setQuery(e.target.value);
   };
 
-
   // Filtered job postings based on search query
   const searchedJobs =
     query.trim() === ""
-      ? postings
+      ? postings // checks if postings array is empty or not. If not empty, filter method is called
       : postings.filter(
           (job) =>
             (job.title &&
@@ -72,15 +73,19 @@ const Home = () => {
           withCredentials: true,
         }
       );
-      setPostings(response.data);
+      setPostings((prevPostings) => [...prevPostings, ...response.data]); // avoids overwriting the existing data and stores the new data along with it
       setLoading(false);
-      // if (marketingRes.data.length === 0 && engineerRes.data.length === 0) {
-      //   setError("No job postings found");
-      // }
+      setExtraloading(false);
+      // if no postings could be found
+      if (response.data.length === 0) {
+        setError("No job postings found");
+      }
     } catch (error) {
       console.error("Error fetching jobs:", error.message);
+      // in case of error, an error message is displayed and postings array is cleared incase of network issues mid sessions
       setTimeout(() => {
         setError("Error fetching jobs. Please try again");
+        setPostings([]);
         setLoading(false);
       }, 4000);
     }
@@ -91,9 +96,12 @@ const Home = () => {
     getJobs(1, 15, cat);
   }, []);
 
-  const loadMoreJobs = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  // function to load more jobs for the page
+  const loadMoreJobs = useCallback(() => {
+    setCurrentPage((prevPage) => prevPage + 1);
+    setExtraloading(true);
+    getJobs(currentPage + 1, 15, cat).finally(() => setExtraloading(false));
+  }, [cat, currentPage, getJobs]);
 
   // styles for the category select component
   const selectStyle = {
@@ -136,7 +144,6 @@ const Home = () => {
               onChange={handleChange}
               styles={selectStyle}
             />
-
             <motion.button
               className="border-2 border-secondary desk:bg-primary bg-secondary desk:text-black text-primary w-40 px-4 rounded-xl"
               whileHover={{ backgroundColor: "#1a70eb", color: "white" }}
@@ -146,16 +153,10 @@ const Home = () => {
           </div>
         </div>
         {/* JOB POSTINGS DIV  */}
-        <div className="flex flex-col items-center min-h-screen gap-9 min-w-full border-t-2 border-slate-300 pt-16 mt-12  ">
-          {/* <InfiniteScroll
-            dataLength={searchedJobs.length}
-            next={loadMoreJobs}
-            hasMore={currentPage < totalPages}
-            loader={<h4>Loading...</h4>}
-            endMessage={<p>No more items</p>}
-          > */}
+        <div className="flex flex-col items-center min-h-screen gap-9 min-w-full border-t-2 border-slate-300 pt-16 mt-12">
           {/* RENDER THE JOB POSTINGS  */}
           {loading ? (
+            // display loading icon until jobs postings are fetched
             <FontAwesomeIcon
               icon={faSpinner}
               spin
@@ -163,20 +164,25 @@ const Home = () => {
               style={{ color: "#1a70eb" }}
             />
           ) : (
-            <>
-              {searchedJobs.map((job) => (
-                <JobCard
-                  key={job.id}
-                  title={job.title}
-                  company={job.company.display_name}
-                  location={job.location.display_name}
-                  maxsalary={job.salary_max}
-                  description={job.description}
-                />
-              ))}
-            </>
+            // display the fetched job postings
+            searchedJobs.length > 0 && (
+              <>
+                {searchedJobs.map((job) => (
+                  <JobCard
+                    key={job.id}
+                    title={job.title}
+                    company={job.company.display_name}
+                    location={job.location.display_name}
+                    maxsalary={job.salary_max}
+                    description={job.description}
+                  />
+                ))}
+                {/* LOAD MORE BUTTON  */}
+                <LoadMore onClick={loadMoreJobs} loading={extraloading} />
+              </>
+            )
           )}
-          {/* ERROR HANDLING  */}
+          {/* IN CASE OF ERROR */}
           {error && (
             <div className="flex flex-col items-center mt-4">
               <div className="text-red-500 mb-2">{error}</div>
@@ -192,7 +198,6 @@ const Home = () => {
               </button>
             </div>
           )}
-          {/* </InfiniteScroll> */}
         </div>
       </div>
       <Footer />
