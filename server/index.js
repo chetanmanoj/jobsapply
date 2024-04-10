@@ -5,7 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 // file imports
-const errorHandler = require("../utils/ErrorHandler");
+const errorHandler = require("./utils/ErrorHandler");
 
 // port number
 const PORT = 8000;
@@ -25,7 +25,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(errorHandler);
 
 // use routes
-app.use("/api/jobs", require("../routes/jobRouter"));
+app.use("/api/jobs", require("./routes/jobRouter"));
 
 // start server
 app.listen(PORT, () =>
