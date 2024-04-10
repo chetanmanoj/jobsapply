@@ -10,14 +10,14 @@ const errorHandler = require("./utils/ErrorHandler");
 // port number
 const PORT = 8000;
 
-// app.use(
-//   cors({
-//     origin: "https://jobsapply-sandy.vercel.app",
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     credentials: true,
-//   })
-// );
-app.use(cors())
+app.use(
+  cors({
+    // origin: "https://jobsapply-sandy.vercel.app",
+    origin: "*",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
