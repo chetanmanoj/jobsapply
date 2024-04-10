@@ -2,6 +2,8 @@
 
 A dynamic job application platform that seamlessly integrates Adzuna.com's extensive job listings, providing users with up-to-date and relevant job opportunities.
 
+<img src='./client/public/ss.png' alt='Screenshot' width='400'>
+
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
 1. Node.js installed
