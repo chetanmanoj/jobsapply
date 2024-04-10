@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 // error handling middleware
 app.use(errorHandler);
 
+console.log(process.env.APP_ID , process.env.API_KEY)
 // use routes
 app.use("/api/jobs", require("./routes/jobRouter"));
 
