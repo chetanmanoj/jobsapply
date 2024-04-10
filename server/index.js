@@ -12,7 +12,7 @@ const PORT = 8000;
 
 app.use(
   cors({
-    origin: "https://jobsapply-frontend.vercel.app/",
+    origin: "https://jobsapply-sandy.vercel.app",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
