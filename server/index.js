@@ -12,7 +12,7 @@ const PORT = 8000;
 
 app.use(
   cors({
-    origin: "https://jobsapply-sandy.vercel.app",
+    origin: "https://jobsapply.vercel.app",
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
@@ -29,5 +29,5 @@ app.use("/api/jobs", require("./routes/jobRouter"));
 
 // start server
 app.listen(PORT, () =>
-  console.log(`app listening on http://127.0.0.1:${PORT}/api/`)
+  console.log(`app listening on http://127.0.0.1:${PORT}`)
 );
