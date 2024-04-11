@@ -5,7 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 // file imports
-const errorHandler = require("./utils/ErrorHandler");
+const errorHandler = require("./utils/errorHandler");
 
 // port number
 const PORT = 8000;
