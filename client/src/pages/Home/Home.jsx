@@ -166,7 +166,6 @@ const Home = () => {
             />
           ) : (
             // display the fetched job postings
-            searchedJobs.length > 0 && (
               <>
                 {searchedJobs.map((job) => (
                   <JobCard
@@ -181,7 +180,6 @@ const Home = () => {
                 {/* LOAD MORE BUTTON  */}
                 <LoadMore onClick={loadMoreJobs} loading={extraloading} />
               </>
-            )
           )}
           {/* IN CASE OF ERROR */}
           {error && (
