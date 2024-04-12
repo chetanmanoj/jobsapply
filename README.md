@@ -2,7 +2,7 @@
 
 A dynamic job application platform that seamlessly integrates Adzuna.com's extensive job listings, providing users with up-to-date and relevant job opportunities.
 
-<img src='./client/public/ss.png' alt='Screenshot' width='1000'>
+<img src='https://ibb.co/pjTsLZG' alt='Screenshot' width='1000'>
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:

@@ -8,9 +8,11 @@ const JobCard = ({ id, title, company, maxsalary, location, description }) => {
       transition={{ duration: 0.25 }}
     >
       <div className="flex flex-1 flex-col border-b-2 border-primary tab:border-b-0 pb-4 tab:pb-0 gap-2 just ">
+        {/* DISPLAY JOB TITLE */}
         <h1 className=" text-[1.1rem] tab:text-[1.3rem] font-semibold desk:text-[1.6rem]">
           {title}
         </h1>
+        {/* DISPLAY COMPANY NAME, LOCATION AND MAXIMUM SALARY */}
         <span className="font-semibold mb-4">{company}</span>
         <span className="text-[1rem] desk:text-[1.2rem]">
           Location: {location}
@@ -19,6 +21,7 @@ const JobCard = ({ id, title, company, maxsalary, location, description }) => {
           Salary: £ {maxsalary}
         </span>
       </div>
+      {/* DISPLAY JOB DESCRIPTION */}
       <div className="flex flex-1 text-descp overflow-hidden mt-2 tab:mt-0 text-[0.9rem] tab:text-[1rem] desk:text-[1.2rem] border-t-2 pt-4 tab:pt-0 tab:border-0">
         <p className="overflow-y-scroll">{description}</p>
       </div>

@@ -70,8 +70,10 @@ const NavBar = () => {
           className="relative text-black text-[1.5rem] "
         >
           {toggle ? (
+            // if toggle is set to false
             <FontAwesomeIcon icon={faX} />
           ) : (
+            // if toggle is set to true
             <FontAwesomeIcon icon={faBars} />
           )}
           <ul

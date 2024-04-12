@@ -61,6 +61,7 @@ const Home = () => {
         );
 
   // function to fetch job postings from the server
+  // page - page number from the site for that query, resultsPerPage - amount of postings to fetch from that page, what - job postings category
   const getJobs = async (page = 1, resultsPerPage = 15, what = cat) => {
     try {
       const response = await axios.get(
@@ -73,7 +74,7 @@ const Home = () => {
           withCredentials: true,
         }
       );
-      setPostings((prevPostings) => [...prevPostings, ...response.data]); // avoids overwriting the existing data and stores the new data along with it
+      setPostings((prevPostings) => [...prevPostings, ...response.data]); // avoids overwriting the existing data and stores the new data along with it (when 'load more' is clicked)
       setLoading(false);
       setExtraloading(false);
       // if no postings could be found
@@ -152,9 +153,9 @@ const Home = () => {
             </motion.button>
           </div>
         </div>
-        {/* JOB POSTINGS DIV  */}
+        {/* JOB POSTINGS DIV */}
         <div className="flex flex-col items-center min-h-screen gap-9 min-w-full border-t-2 border-slate-300 pt-16 mt-12">
-          {/* RENDER THE JOB POSTINGS  */}
+          {/* RENDER THE JOB POSTINGS */}
           {loading ? (
             // display loading icon until jobs postings are fetched
             <FontAwesomeIcon
